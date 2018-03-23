@@ -7,6 +7,7 @@ class User
     field :email, type: String
     field :password_digest, type: String
     field :token, type: String
+    field :token_created_at, type: DateTime
 
     validates_presence_of :email, :password
     validates_uniqueness_of :email
@@ -25,4 +26,24 @@ class User
         end
     end
 
+    def allow_token_to_be_userd_only_once
+        regenerate_token
+        update_attribute(:token_created_at, Time.now)
+    end
+
+    def self.with_unexpired_token(token, period)
+        where(token: token).where(:token_created_at.gte => period).first
+    end
+
+    def logout
+        invalidate_token
+    end
+
+    private
+
+    #this functionality is not available in has_secure_token
+    def invalidate_token
+        update_attribute(:token, nil)
+        update_attribute(:token_created_at, Time.now)
+    end
 end
