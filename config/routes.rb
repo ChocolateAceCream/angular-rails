@@ -3,7 +3,8 @@ Rails.application.routes.draw do
   get 'exercises/index'
 
   scope :format => true, :constraints => { :format => 'json'} do
-      post "/login" => "sessions#create"
+      post "/login" => "sessions#login"
+      post "/signup" => "sessions#signup"
       delete "/logout" => "sessions#destroy"
   end
 end

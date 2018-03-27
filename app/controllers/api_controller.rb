@@ -18,7 +18,7 @@ class ApiController < ApplicationController
 
     def authenticate_token
         authenticate_with_http_token do |token, options|
-            if user = User.with_unexpired_token(token, 2.days.ago)
+            if user = User.with_unexpired_token(token, 9.days.ago)
                 #Compare the tokens in a time-constant manner, to mitigate
                 #timing attacks.
                 ActiveSupport::SecurityUtils.secure_compare(

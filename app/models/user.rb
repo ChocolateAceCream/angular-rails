@@ -9,6 +9,8 @@ class User
     field :token, type: String
     field :token_created_at, type: DateTime
 
+    embeds_many :exercises
+
     validates_presence_of :email, :password
     validates_uniqueness_of :email
     validates_length_of :password, minimum: 8, maximum: 16
@@ -22,8 +24,17 @@ class User
     def self.valid_login?(email, password)
         user = find_by(email: email)
         if user && user.authenticate(password)
-            user
+          user
         end
+    end
+
+    def self.valid_email?(email, password)
+        user = find_by(email: email)
+        if user == nil
+            user = User.create(email: email, password: password)
+            return user
+        end
+
     end
 
     def allow_token_to_be_userd_only_once

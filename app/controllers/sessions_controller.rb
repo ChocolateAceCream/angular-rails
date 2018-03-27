@@ -1,7 +1,17 @@
 class SessionsController < ApiController
-    skip_before_action :require_login, only: [:create], raise: false
+    skip_before_action :require_login, only: [:login, :signup], raise: false
 
-    def create
+    def signup
+        if user = User.valid_email?(params[:email], params[:password])
+            user.allow_token_to_be_userd_only_once
+            send_auth_token_for_valid_login_of(user)
+        else
+            render_unauthorized("Email already taken")
+        end
+
+    end
+
+    def login
         if user = User.valid_login?(params[:email], params[:password])
             user.allow_token_to_be_userd_only_once
             send_auth_token_for_valid_login_of(user)
