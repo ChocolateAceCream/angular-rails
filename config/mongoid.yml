@@ -163,3 +163,8 @@ test:
         max_pool_size: 1
         user: <%= ENV['DATABASE_USERNAME'] %>
         password: <%= ENV['DATABASE_PASSWORD'] %>
+
+production:
+    clients:
+        default:
+            uri: mongodb://heroku_lc0mm07k:di880817@ds217360.mlab.com:17360/heroku_lc0mm07k
